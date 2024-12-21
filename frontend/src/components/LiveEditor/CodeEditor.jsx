@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { Box, HStack } from "@chakra-ui/react";
 import { Editor } from "@monaco-editor/react";
 import LanguageSelector from "./LanguageSelector";
@@ -7,8 +7,8 @@ import Output from "./Output";
 
 const CodeEditor = () => {
   const editorRef = useRef();
-  const [value, setValue] = useState("");
   const [language, setLanguage] = useState("javascript");
+  const [value, setValue] = useState(CODE_SNIPPETS["javascript"]); // Initialize based on the default language.
 
   const onMount = (editor) => {
     editorRef.current = editor;
@@ -17,8 +17,13 @@ const CodeEditor = () => {
 
   const onSelect = (language) => {
     setLanguage(language);
-    setValue(CODE_SNIPPETS[language]);
+    setValue(CODE_SNIPPETS[language]); // Sync value with selected language snippet.
   };
+
+  // Ensure value is always synced when the language changes (optional safeguard).
+  useEffect(() => {
+    setValue(CODE_SNIPPETS[language]);
+  }, [language]);
 
   return (
     <Box>
@@ -33,16 +38,16 @@ const CodeEditor = () => {
             }}
             height="75vh"
             theme="vs-dark"
-            language={language === 'react' ? "javascript" : language}
-            defaultValue={CODE_SNIPPETS[language]}
+            language={language === "react" ? "javascript" : language}
+            value={value} // Use value instead of defaultValue for two-way binding.
             onMount={onMount}
-            value={value}
-            onChange={(value) => setValue(value)}
+            onChange={(value) => setValue(value || "")} // Update state when editor content changes.
           />
         </Box>
-        <Output editorRef={editorRef} language={language} />
+        <Output editorRef={editorRef} language={language} value={value} />
       </HStack>
     </Box>
   );
 };
+
 export default CodeEditor;

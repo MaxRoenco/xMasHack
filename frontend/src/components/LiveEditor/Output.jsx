@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Box, Button, Text, Input, VStack, useToast } from "@chakra-ui/react";
 import { executeCode } from "../../api";
 
-const Output = ({ editorRef, language }) => {
+const Output = ({ editorRef, language, value }) => {
   const toast = useToast();
   const [output, setOutput] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -10,6 +10,7 @@ const Output = ({ editorRef, language }) => {
   const [showAdvice, setShowAdvice] = useState(false);
   const [advicePrompt, setAdvicePrompt] = useState("");
   const [adviceOutput, setAdviceOutput] = useState("");
+  const [isAdviceLoading, setIsAdviceLoading] = useState(false);
 
   const runCode = async () => {
     const sourceCode = editorRef.current.getValue();
@@ -33,9 +34,47 @@ const Output = ({ editorRef, language }) => {
     }
   };
 
-  const handleAdviceSubmit = () => {
-    // This will be implemented later by you
-    console.log("Advice prompt:", advicePrompt);
+  const handleAdviceSubmit = async () => {
+    if (!advicePrompt.trim()) {
+      toast({
+        title: "Please enter a question",
+        status: "warning",
+        duration: 3000,
+      });
+      return;
+    }
+
+    try {
+      setIsAdviceLoading(true);
+      const response = await fetch("http://127.0.0.1:5000/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: `Code:\n${value}\n\nQuestion (GIVE REALLY SHORT ANSWER): ${advicePrompt}`,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      console.log(data.message)
+      setAdviceOutput(data.message || "No response received");
+    } catch (error) {
+      console.error("Error fetching advice:", error);
+      toast({
+        title: "Error getting advice",
+        description: error.message || "Failed to get advice",
+        status: "error",
+        duration: 6000,
+      });
+      setAdviceOutput("Failed to get advice. Please try again.");
+    } finally {
+      setIsAdviceLoading(false);
+    }
   };
 
   return (
@@ -76,20 +115,22 @@ const Output = ({ editorRef, language }) => {
               size="sm"
               onClick={handleAdviceSubmit}
               mb={4}
+              isLoading={isAdviceLoading}
             >
               Submit
             </Button>
             <Box
               height="60vh"
               p={2}
-              color={isError ? "red.400" : ""}
               border="1px solid"
               borderRadius={4}
-              borderColor={isError ? "red.500" : "#333"}
+              borderColor="#333"
               overflowY="auto"
               w="100%"
             >
-              {'Click "Run Code" to see the output here'}
+              <Text whiteSpace="pre-wrap">
+                {adviceOutput || "Advice will appear here..."}
+              </Text>
             </Box>
           </Box>
         ) : (

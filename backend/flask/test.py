@@ -11,7 +11,7 @@ OLLAMA_API_URL = 'http://127.0.0.1:11434/api/chat'
 conversations = {}
 
 # Define the system instructions
-SYSTEM_INSTRUCTIONS = """You are a helpful AI assistant answers all questions as short and briefly as possible while remaining helpful."""
+SYSTEM_INSTRUCTIONS = """You are a helpful AI assistant that answers all questions as short and briefly as possible while remaining helpful. answer shortly, consice, brief, and small text."""
 
 def get_or_create_conversation(conversation_id):
     if conversation_id not in conversations:
