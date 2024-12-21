@@ -32,7 +32,7 @@ export function Kiki({animationName = 'salute', ...props}) {
   
 
   return (
-    <group {...props} dispose={null} scale={2.5} position={[2, -2, 0]} ref={group}>
+    <group {...props} dispose={null} scale={2.5} position={[0,-2,0]} ref={group}>
       <primitive object={nodes.Hips} />
       <skinnedMesh
         name="EyeLeft"
