@@ -2,11 +2,12 @@ import React from 'react'
 import { OrbitControls } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
 import { Kiki } from './Kiki'
+import Message from './Message'
 
 const KikiSection = () => {
   return (
     <div>
-      <div className="absolute bottom-0 right-0 flex justify-center items-center h-[600px] w-[600px]">
+      <div className="absolute bottom-0 right-0 flex justify-center items-center h-[600px] w-[300px]">
         <Canvas className="h-full w-full ">
           <ambientLight intensity={5.3} />
           <pointLight position={[10, 10, 10]} intensity={0.5} />
@@ -21,6 +22,7 @@ const KikiSection = () => {
             <Kiki />
         </Canvas>
       </div>
+      <Message/>
     </div>
   )
 }

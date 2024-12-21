@@ -1,8 +1,9 @@
 import KikiSection from "./components/KikiSection"
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import Home from "./components/Home"
+import Home from "./components/HomePage"
 import { Box } from "@chakra-ui/react";
 import CodeEditor from "./components/LiveEditor/CodeEditor";
+import ProjectRoadmap from "./components/ProjectRoadmap ";
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/kiki-section" element={<KikiSection />} />
+          <Route path="/roadmap" element={<ProjectRoadmap />} />
           <Route path="/editor" element={
             <Box minH="100vh" bg="#0f0a19" color="gray.500" px={6} py={8}>
               <CodeEditor />
