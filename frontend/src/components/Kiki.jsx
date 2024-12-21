@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useAnimations, useFBX, useGLTF } from '@react-three/drei'
 
-export function Kiki({animationName = 'clapping', ...props}) {
+export function Kiki({animationName = 'salute', ...props}) {
   const { nodes, materials } = useGLTF('/kikiWoman.glb')
   const group = useRef();
 
