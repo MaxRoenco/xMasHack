@@ -4,7 +4,7 @@ import { useGLTF } from '@react-three/drei'
 export function Tom(props) {
   const { nodes, materials } = useGLTF('/tom.glb')
   return (
-    <group {...props} dispose={null} scale={10} position={[0,-4,6]}>
+    <group {...props} dispose={null} scale={3.5} position={[3,-1,0]}>
       <mesh
         castShadow
         receiveShadow
