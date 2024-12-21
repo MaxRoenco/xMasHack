@@ -1,12 +1,10 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 import { OrbitControls } from '@react-three/drei'
-import { Tom } from './tom'
 import { Canvas } from '@react-three/fiber'
 import { Kiki } from './Kiki'
 import Message from './Message'
-import CanvasLoader from '../components/CanvasLoader'
 
-const TomSection = () => {
+const KikiSection = () => {
   return (
     <div>
       <div className="absolute bottom-0 right-0 flex justify-center items-center h-3/4 w-3/4 bg-gray-800">
@@ -32,4 +30,4 @@ const TomSection = () => {
   )
 }
 
-export default TomSection
+export default KikiSection
