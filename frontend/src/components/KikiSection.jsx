@@ -4,11 +4,11 @@ import { Canvas } from '@react-three/fiber'
 import { Kiki } from './Kiki'
 import Message from './Message'
 
-const KikiSection = () => {
+const KikiSection = ({className = ""}) => {
   return (
-    <div>
-      <div className="absolute bottom-0 right-0 flex justify-center items-center h-[600px] w-[300px]">
-        <Canvas className="h-full w-full ">
+    <div className='pointer-events-none'>
+      <div className={`absolute flex justify-center items-center h-[600px] w-[600px] pointer-events-none ${className}`}>
+        <Canvas className="h-full w-full pointer-events-none">
           <ambientLight intensity={5.3} />
           <pointLight position={[10, 10, 10]} intensity={0.5} />
           <directionalLight 

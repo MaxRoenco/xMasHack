@@ -1,22 +1,10 @@
 import React from 'react';
-import { Menu, Home, Search, Compass, Bell, Settings } from 'lucide-react';
+
 
 const HomePage = () => {
   return (
     <div className="min-h-screen bg-black text-gray-100">
       {/* Sidebar Navigation */}
-      <nav className="fixed top-0 left-0 h-screen w-16 bg-gray-900 flex flex-col items-center py-8 space-y-8">
-        <Menu className="w-6 h-6 text-purple-500 hover:text-purple-400 cursor-pointer" />
-        <div className="space-y-6">
-          <Home className="w-6 h-6 text-gray-400 hover:text-purple-400 cursor-pointer" />
-          <Search className="w-6 h-6 text-gray-400 hover:text-purple-400 cursor-pointer" />
-          <Compass className="w-6 h-6 text-gray-400 hover:text-purple-400 cursor-pointer" />
-          <Bell className="w-6 h-6 text-gray-400 hover:text-purple-400 cursor-pointer" />
-        </div>
-        <div className="mt-auto">
-          <Settings className="w-6 h-6 text-gray-400 hover:text-purple-400 cursor-pointer" />
-        </div>
-      </nav>
 
       {/* Main Content */}
       <main className="ml-16 p-8">
