@@ -1,38 +1,47 @@
 import React, { useEffect, useRef } from 'react'
 import { useAnimations, useFBX, useGLTF } from '@react-three/drei'
 
-export function Kiki({animationName = 'salute', ...props}) {
+export function Kiki({animationName = 'idle', ...props}) {
   const { nodes, materials } = useGLTF('/kikiWoman.glb')
   const group = useRef();
 
-  const { animations: idleAnimation } = useFBX('animations/idle.fbx')
-  const { animations: saluteAnimation } = useFBX('animations/salute.fbx')
-  const { animations: victoryAnimation } = useFBX('animations/victory.fbx')
-  const { animations: clappingAnimation } = useFBX('animations/clapping.fbx')
-  const { animations: tauntAnimation } = useFBX('animations/tauntTest.fbx')
+  const { animations: idleAnimation } = useFBX('/animations/idle.fbx')
+  const { animations: saluteAnimation } = useFBX('/animations/salute.fbx')
+  const { animations: victoryAnimation } = useFBX('/animations/victory.fbx')
+  const { animations: clappingAnimation } = useFBX('/animations/clapping.fbx')
 
-  idleAnimation[0].name = 'idle';
-  saluteAnimation[0].name = 'salute';
-  clappingAnimation[0].name = 'clapping';
-  victoryAnimation[0].name = 'victory';
-  tauntAnimation[0].name = 'taunt';
+  idleAnimation[0].name = 'idle'
+  saluteAnimation[0].name = 'salute'
+  clappingAnimation[0].name = 'clapping'
+  victoryAnimation[0].name = 'victory'
 
-  const { actions } = useAnimations([idleAnimation[0], saluteAnimation[0], clappingAnimation[0], victoryAnimation[0], tauntAnimation[0]], group);
+  const animations = [
+    idleAnimation[0],
+    saluteAnimation[0],
+    clappingAnimation[0],
+    victoryAnimation[0],
+  ]
+
+  const { actions } = useAnimations(animations, group)
 
   useEffect(() => {
+    Object.values(actions).forEach(action => action?.fadeOut(0.5))
+
+    if (actions[animationName]) {
+      actions[animationName].reset().fadeIn(0.5).play()
+    } else {
+      console.warn(`Animation "${animationName}" not found. Available animations:`, Object.keys(actions))
+    }
+
+    return () => {
       if (actions[animationName]) {
-          actions[animationName].reset().fadeIn(0.5).play();
+        actions[animationName].fadeOut(0.5)
       }
-      return () => {
-          if (actions[animationName]) {
-              actions[animationName].fadeOut(0.5);
-          }
-      };
-  }, [animationName, actions]);
-  
+    }
+  }, [animationName, actions])
 
   return (
-    <group {...props} dispose={null} scale={2.5} rotation={[Math.PI/6,0,0]} position={[0,-2.5,0]} ref={group}>
+    <group {...props} dispose={null} scale={2.5} rotation={[Math.PI/6, 0, 0]} position={[0, -2.5, 0]} ref={group}>
       <primitive object={nodes.Hips} />
       <skinnedMesh
         name="EyeLeft"
@@ -100,4 +109,5 @@ export function Kiki({animationName = 'salute', ...props}) {
   )
 }
 
+// Preload the model
 useGLTF.preload('/kikiWoman.glb')
