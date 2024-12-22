@@ -6,8 +6,8 @@ import Message from './Message'
 
 const KikiSection = ({className = ""}) => {
   return (
-    <div className='pointer-events-none'>
-      <div className={`absolute flex justify-center items-center h-[600px] w-[600px] pointer-events-none ${className}`}>
+    <div className={`pointer-events-none absolute ${className}`}>
+      <div className={`flex justify-center items-center h-[600px] w-[600px] pointer-events-none`}>
         <Canvas className="h-full w-full pointer-events-none">
           <ambientLight intensity={5.3} />
           <pointLight position={[10, 10, 10]} intensity={0.5} />
@@ -22,7 +22,7 @@ const KikiSection = ({className = ""}) => {
             <Kiki />
         </Canvas>
       </div>
-      <Message/>
+      {/* <Message/> */}
     </div>
   )
 }

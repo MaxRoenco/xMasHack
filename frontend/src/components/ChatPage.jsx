@@ -3,10 +3,10 @@ import Chat from "./Chat"
 
 const ChatPage = () => {
   return (
-    <>
-        <KikiSection className="left-[-7%] top-[18%]"/>
+    <div className="overflow-hidden">
+        <KikiSection className="left-[-7%] top-[12%]"/>
         <Chat/>
-    </>
+    </div>
   )
 }
 
