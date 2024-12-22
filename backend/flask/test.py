@@ -71,14 +71,40 @@ def generate_chat_completion(conversation_id, user_message, custom_instructions=
     except requests.exceptions.RequestException as error:
         return f"Error generating completion: {error}"
 
-@app.route('/generate', methods=['POST'])
-def generate():
+@app.route('/optimize', methods=['POST'])
+def optimize():
+    data = request.get_json()
+    if not data or 'optimal' not in data or 'given' not in data:
+        return jsonify({'error': 'Missing message field'}), 400
+    
+    conversation_id = data.get('conversation_id', 'default')
+    optimal = data.get('optimal')
+    given = data.get('given')
+    instructions = "You are a helpful AI assistant whose job is to compare the optimal code, with the given one, and help the user figure out the problems in their code, and suggest improvements. Your answers should be brief and NOT contain the optimal code, only the explanation or how to improve it. Just enough to address the issue in the code. the answer should be short and brief. 10 words max."
+    prompt = f'''
+    Optimal code: {optimal}
+
+    Given code: {given}
+
+    Assistant answer (only 1 very short sentence, of a simple advice, 10 words max):
+    '''
+    
+    message = generate_chat_completion(conversation_id, prompt, instructions)
+    
+    return jsonify({
+        'message': message,
+        'conversation_id': conversation_id,
+        'history': conversations[conversation_id]['messages']
+    }), 200
+
+@app.route('/chat', methods=['POST'])
+def chat():
     data = request.get_json()
     if not data or 'message' not in data:
         return jsonify({'error': 'Missing message field'}), 400
     
     conversation_id = data.get('conversation_id', 'default')
-    custom_instructions = data.get('system_instructions')  # Optional custom instructions
+    custom_instructions = "You area a friendly chatbot called kiki the cat! you always answer briefly and helpfully while raising the morale of the user, brief answers, right to the point."
     
     message = generate_chat_completion(conversation_id, data['message'], custom_instructions)
     
@@ -87,6 +113,7 @@ def generate():
         'conversation_id': conversation_id,
         'history': conversations[conversation_id]['messages']
     }), 200
+
 
 @app.route('/set_instructions/<conversation_id>', methods=['POST'])
 def set_instructions(conversation_id):
@@ -104,8 +131,8 @@ def set_instructions(conversation_id):
 
 @app.route('/history/<conversation_id>', methods=['GET'])
 def get_history(conversation_id):
-    conversation = get_or_create_conversation(conversation_id)[1:]
-    return jsonify(conversation), 200
+    conversation = get_or_create_conversation(conversation_id)
+    return jsonify({'messages': conversation['messages'][1:]}), 200
 
 @app.route('/clear/<conversation_id>', methods=['POST'])
 def clear_history(conversation_id):
