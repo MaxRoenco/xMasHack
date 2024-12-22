@@ -1,9 +1,8 @@
-import { useState } from "react";
-import { Box, Button, Text, Input, VStack, useToast } from "@chakra-ui/react";
-import { executeCode } from "../../api";
+import React, { useState } from 'react';
+import { Loader2, Play, HelpCircle, Send, Terminal, AlertCircle } from 'lucide-react';
+import { executeCode } from '../../api'; // Added the missing import
 
 const Output = ({ editorRef, language, value }) => {
-  const toast = useToast();
   const [output, setOutput] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -20,15 +19,11 @@ const Output = ({ editorRef, language, value }) => {
       const { run: result } = await executeCode(language, sourceCode);
       setOutput(result.output.split("\n"));
       result.stderr ? setIsError(true) : setIsError(false);
-      setShowAdvice(false); // Switch back to output view when running code
+      setShowAdvice(false);
     } catch (error) {
-      console.log(error);
-      toast({
-        title: "An error occurred.",
-        description: error.message || "Unable to run code",
-        status: "error",
-        duration: 6000,
-      });
+      console.error(error);
+      setIsError(true);
+      setOutput(['An error occurred while running the code.']);
     } finally {
       setIsLoading(false);
     }
@@ -36,11 +31,6 @@ const Output = ({ editorRef, language, value }) => {
 
   const handleAdviceSubmit = async () => {
     if (!advicePrompt.trim()) {
-      toast({
-        title: "Please enter a question",
-        status: "warning",
-        duration: 3000,
-      });
       return;
     }
 
@@ -61,96 +51,115 @@ const Output = ({ editorRef, language, value }) => {
       }
 
       const data = await response.json();
-      console.log(data.message)
       setAdviceOutput(data.message || "No response received");
     } catch (error) {
       console.error("Error fetching advice:", error);
-      toast({
-        title: "Error getting advice",
-        description: error.message || "Failed to get advice",
-        status: "error",
-        duration: 6000,
-      });
       setAdviceOutput("Failed to get advice. Please try again.");
     } finally {
       setIsAdviceLoading(false);
     }
   };
 
+  const handleKeyPress = (e) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      handleAdviceSubmit();
+    }
+  };
+
   return (
-    <Box w="50%" maxW="50%" overflow="hidden">
-      <VStack spacing={4} align="stretch" h="100%">
-        <Text fontSize="lg">Output</Text>
+    <div className="h-screen w-1/2 bg-gray-900 border-l border-violet-500/20">
+      <div className="h-full flex flex-col p-4">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center gap-2">
+            <Terminal className="w-5 h-5 text-violet-400" />
+            <h2 className="text-lg font-semibold text-violet-300">Output Console</h2>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={runCode}
+              disabled={isLoading}
+              className="px-4 py-2 bg-violet-600/40 text-violet-100 font-medium rounded-lg
+                border border-violet-500/30 hover:bg-violet-500/40 transition-colors 
+                disabled:bg-gray-800/40 disabled:border-gray-700/30 disabled:text-gray-500 
+                disabled:cursor-not-allowed flex items-center gap-2"
+            >
+              {isLoading ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : (
+                <Play className="w-4 h-4" />
+              )}
+              Run Code
+            </button>
+            <button
+              onClick={() => setShowAdvice(!showAdvice)}
+              className="px-4 py-2 bg-gray-800/40 text-violet-100 font-medium rounded-lg
+                border border-violet-500/30 hover:bg-violet-500/40 transition-colors
+                flex items-center gap-2"
+            >
+              {showAdvice ? <Terminal className="w-4 h-4" /> : <HelpCircle className="w-4 h-4" />}
+              {showAdvice ? 'Show Output' : 'Get Advice'}
+            </button>
+          </div>
+        </div>
 
-        <Box>
-          <Button
-            variant="outline"
-            colorScheme="green"
-            mr={4}
-            isLoading={isLoading}
-            onClick={runCode}
-          >
-            Run Code
-          </Button>
-          <Button
-            variant="outline"
-            colorScheme="blue"
-            onClick={() => setShowAdvice(!showAdvice)}
-          >
-            {showAdvice ? "Show Output" : "Get Advice"}
-          </Button>
-        </Box>
-
+        {/* Content Area */}
         {showAdvice ? (
-          <Box w="100%" overflow="hidden">
-            <Input
-              placeholder="Ask for advice about your code..."
-              value={advicePrompt}
-              onChange={(e) => setAdvicePrompt(e.target.value)}
-              mb={2}
-              w="100%"
-            />
-            <Button
-              colorScheme="blue"
-              size="sm"
-              onClick={handleAdviceSubmit}
-              mb={4}
-              isLoading={isAdviceLoading}
-            >
-              Submit
-            </Button>
-            <Box
-              height="60vh"
-              p={2}
-              border="1px solid"
-              borderRadius={4}
-              borderColor="#333"
-              overflowY="auto"
-              w="100%"
-            >
-              <Text whiteSpace="pre-wrap">
-                {adviceOutput || "Advice will appear here..."}
-              </Text>
-            </Box>
-          </Box>
+          <div className="flex-1 flex flex-col">
+            <div className="flex gap-2 mb-4">
+              <input
+                type="text"
+                placeholder="Ask for advice about your code..."
+                value={advicePrompt}
+                onChange={(e) => setAdvicePrompt(e.target.value)}
+                onKeyPress={handleKeyPress}
+                className="flex-1 p-3 bg-gray-800/40 text-violet-100 border border-violet-500/30 rounded-lg 
+                  focus:border-violet-400 focus:outline-none transition-colors placeholder-violet-400/50"
+              />
+              <button
+                onClick={handleAdviceSubmit}
+                disabled={isAdviceLoading || !advicePrompt.trim()}
+                className="px-6 py-2 bg-violet-600/40 text-violet-100 font-medium rounded-lg
+                  border border-violet-500/30 hover:bg-violet-500/40 transition-colors 
+                  disabled:bg-gray-800/40 disabled:border-gray-700/30 disabled:text-gray-500 
+                  disabled:cursor-not-allowed flex items-center gap-2"
+              >
+                {isAdviceLoading ? (
+                  <Loader2 className="w-4 h-4 animate-spin" />
+                ) : (
+                  <Send className="w-4 h-4" />
+                )}
+                Ask
+              </button>
+            </div>
+            <div className="flex-1 bg-gray-800/40 rounded-lg border border-violet-500/20 p-4 overflow-y-auto">
+              <pre className="text-violet-100 whitespace-pre-wrap font-mono">
+                {adviceOutput || "Ask a question about your code to get advice..."}
+              </pre>
+            </div>
+          </div>
         ) : (
-          <Box
-            height="75vh"
-            p={2}
-            color={isError ? "red.400" : ""}
-            border="1px solid"
-            borderRadius={4}
-            borderColor={isError ? "red.500" : "#333"}
-            overflowY="auto"
-            w="100%"
-          >
-            {output
-              ? output.map((line, i) => <Text key={i}>{line}</Text>)
-              : 'Click "Run Code" to see the output here'}
-          </Box>
+          <div className={`flex-1 bg-gray-800/40 rounded-lg border ${isError ? 'border-red-500/50' : 'border-violet-500/20'} p-4 overflow-y-auto`}>
+            {isError && (
+              <div className="flex items-center gap-2 mb-4 text-red-400">
+                <AlertCircle className="w-5 h-5" />
+                <span>Error occurred while running the code</span>
+              </div>
+            )}
+            {output ? (
+              <pre className={`font-mono ${isError ? 'text-red-400' : 'text-violet-100'}`}>
+                {output.join('\n')}
+              </pre>
+            ) : (
+              <div className="flex items-center justify-center h-full text-violet-400/50">
+                <span>Click "Run Code" to see the output here</span>
+              </div>
+            )}
+          </div>
         )}
-      </VStack>
-    </Box>
+      </div>
+    </div>
   );
 };
 

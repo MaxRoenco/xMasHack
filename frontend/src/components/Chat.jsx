@@ -10,7 +10,6 @@ const ChatInterface = () => {
     const inputRef = useRef(null);
 
     useEffect(() => {
-        // Get or generate conversation ID
         const storedId = localStorage.getItem('conversationId') ||
             `conversation-${Date.now()}`;
         setConversationId(storedId);
@@ -103,22 +102,22 @@ const ChatInterface = () => {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-900 p-8 overflow-hidden">
-            {/* Decorative Background Elements */}
-            {decorativeElements.map((element, index) => (
-                <div
-                    key={index}
-                    className={`absolute ${element.position} transform opacity-10 hover:opacity-20 transition-opacity duration-300`}
-                    style={{ transform: `rotate(${element.rotation})` }}
-                >
-                    <element.icon size={element.size} className="text-violet-400" />
-                </div>
-            ))}
+        <div className="h-screen w-screen bg-gray-900 flex flex-col overflow-hidden">
+            <div className="w-full max-w-4xl mx-auto px-4 flex flex-col h-full py-4">
+                {/* Decorative Background Elements */}
+                {decorativeElements.map((element, index) => (
+                    <div
+                        key={index}
+                        className={`fixed ${element.position} transform opacity-10 hover:opacity-20 transition-opacity duration-300`}
+                        style={{ transform: `rotate(${element.rotation})` }}
+                    >
+                        <element.icon size={element.size} className="text-violet-400" />
+                    </div>
+                ))}
 
-            <div className="max-w-4xl mx-auto">
                 {/* Header */}
-                <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold text-violet-300 mb-4">Coding Assistant</h1>
+                <div className="text-center mb-4">
+                    <h1 className="text-3xl font-bold text-violet-300 mb-2">Coding Assistant</h1>
                     <div className="flex items-center justify-center space-x-4">
                         <div className="bg-violet-900/30 rounded-lg px-4 py-2 flex items-center">
                             <Brain className="w-5 h-5 text-violet-400 mr-2" />
@@ -126,10 +125,11 @@ const ChatInterface = () => {
                         </div>
                     </div>
                 </div>
+
                 {/* Chat Container */}
-                <div className="bg-violet-900/30 rounded-xl shadow-lg backdrop-blur-sm border border-violet-500/20">
+                <div className="flex-1 bg-violet-900/30 rounded-xl shadow-lg backdrop-blur-sm border border-violet-500/20 flex flex-col">
                     {/* Chat Header */}
-                    <div className="p-4 border-b border-violet-500/20 flex justify-between items-center">
+                    <div className="p-3 border-b border-violet-500/20 flex justify-between items-center">
                         <div className="flex items-center gap-2">
                             <MessageCircle className="w-5 h-5 text-violet-400" />
                             <span className="text-violet-300 font-semibold">Chat Session</span>
@@ -144,7 +144,7 @@ const ChatInterface = () => {
                     </div>
 
                     {/* Messages Area */}
-                    <div className="h-[60vh] p-6 overflow-y-auto">
+                    <div className="flex-1 overflow-y-auto p-4">
                         {messages.map((message, index) => (
                             <div
                                 key={index}
@@ -166,7 +166,7 @@ const ChatInterface = () => {
                     </div>
 
                     {/* Input Area */}
-                    <div className="p-4 border-t border-violet-500/20">
+                    <div className="p-3 border-t border-violet-500/20">
                         <div className="flex gap-3">
                             <input
                                 ref={inputRef}

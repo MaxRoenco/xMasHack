@@ -1,38 +1,101 @@
 import React from 'react';
-
+import { Code, Brain, Layout, GitBranch, Terminal, Sparkles } from 'lucide-react';
 
 const HomePage = () => {
+  const features = [
+    {
+      icon: <Code className="w-6 h-6 text-purple-400" />,
+      title: "Real Projects, Real Learning",
+      description: "Complete 80% finished projects from GitHub. Fill in the missing pieces and learn by doing."
+    },
+    {
+      icon: <Brain className="w-6 h-6 text-purple-400" />,
+      title: "AI Mentor KiKi",
+      description: "Get guidance from KiKi, your AI senior developer mentor who helps with best practices and implementation."
+    },
+    {
+      icon: <Layout className="w-6 h-6 text-purple-400" />,
+      title: "Integrated Code Editor",
+      description: "Code directly in your browser with our powerful integrated development environment."
+    }
+  ];
+
+  const specialties = [
+    { name: "Machine Learning", icon: <Brain className="w-8 h-8" /> },
+    { name: "Frontend Development", icon: <Layout className="w-8 h-8" /> },
+    { name: "Backend Development", icon: <Terminal className="w-8 h-8" /> }
+  ];
+
   return (
-    <div className="min-h-screen bg-black text-gray-100">
-      {/* Sidebar Navigation */}
-
-      {/* Main Content */}
-      <main className="ml-16 p-8">
-        {/* Hero Section */}
-        <div className="relative h-96 rounded-2xl overflow-hidden bg-gradient-to-r from-purple-900 via-blue-900 to-black">
-          <div className="absolute inset-0 bg-black bg-opacity-40" />
-          <div className="absolute bottom-8 left-8">
-            <h1 className="text-4xl font-bold mb-2">Welcome to the Experience</h1>
-            <p className="text-gray-300 text-lg">Discover endless entertainment possibilities</p>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-gray-100">
+      {/* Hero Section */}
+      <div className="relative px-4 pt-20 pb-16 sm:px-6 lg:px-8 lg:pt-24">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center">
+            <h1 className="text-5xl font-extrabold tracking-tight mb-4 bg-clip-text text-transparent bg-gradient-to-r from-purple-400 via-pink-500 to-red-500">
+              Learn Development with AI Mentorship
+            </h1>
+            <p className="text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+              Complete real-world projects with guidance from KiKi, your AI mentor. Choose your specialty, pick your projects, and level up your skills.
+            </p>
+            <div className="flex justify-center gap-4">
+              <button className="px-6 py-3 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold flex items-center gap-2">
+                <Sparkles className="w-5 h-5" />
+                Start Learning
+              </button>
+              <button className="px-6 py-3 bg-gray-800 hover:bg-gray-700 rounded-lg font-semibold flex items-center gap-2">
+                <GitBranch className="w-5 h-5" />
+                View Projects
+              </button>
+            </div>
           </div>
         </div>
+      </div>
 
-        {/* Featured Content Grid */}
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold mb-6">Featured Content</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[1, 2, 3].map((item) => (
-              <div key={item} className="bg-gray-900 rounded-lg overflow-hidden hover:ring-2 hover:ring-purple-500 transition-all">
-                <div className="h-48 bg-gradient-to-br from-purple-800 to-blue-900" />
-                <div className="p-4">
-                  <h3 className="text-lg font-semibold mb-2">Featured Item {item}</h3>
-                  <p className="text-gray-400">Experience amazing content with our interactive platform</p>
+      {/* Specialties Section */}
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        <h2 className="text-3xl font-bold text-center mb-12">Choose Your Path</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {specialties.map((specialty, index) => (
+            <div key={index} className="bg-gray-800 rounded-xl p-6 hover:bg-gray-700 transition-all cursor-pointer">
+              <div className="flex flex-col items-center text-center">
+                <div className="mb-4 p-3 bg-purple-900/30 rounded-lg">
+                  {specialty.icon}
                 </div>
+                <h3 className="text-xl font-semibold mb-2">{specialty.name}</h3>
+                <p className="text-gray-400">Master {specialty.name.toLowerCase()} through hands-on project completion</p>
               </div>
-            ))}
-          </div>
+            </div>
+          ))}
         </div>
-      </main>
+      </div>
+
+      {/* Features Section */}
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        <h2 className="text-3xl font-bold text-center mb-12">Platform Features</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {features.map((feature, index) => (
+            <div key={index} className="bg-gray-800/50 rounded-xl p-6">
+              <div className="mb-4">
+                {feature.icon}
+              </div>
+              <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+              <p className="text-gray-400">{feature.description}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* CTA Section */}
+      <div className="max-w-7xl mx-auto px-4 py-16 text-center">
+        <div className="bg-gradient-to-r from-purple-900/50 to-pink-900/50 rounded-2xl p-12">
+          <h2 className="text-3xl font-bold mb-4">Ready to Start Your Journey?</h2>
+          <p className="text-xl text-gray-300 mb-8">Join our community of learners and build your portfolio with real projects.</p>
+          <button className="px-8 py-4 bg-purple-600 hover:bg-purple-700 rounded-lg font-semibold text-lg">
+            Get Started Now
+          </button>
+        </div>
+      </div>
     </div>
   );
 };
