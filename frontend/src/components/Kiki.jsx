@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useAnimations, useFBX, useGLTF } from '@react-three/drei'
 
-export function Kiki({animationName = 'idle', ...props}) {
+export function Kiki({animationName = 'no', ...props}) {
   const { nodes, materials } = useGLTF('/kikiWoman.glb')
   const group = useRef();
 
@@ -9,17 +9,21 @@ export function Kiki({animationName = 'idle', ...props}) {
   const { animations: saluteAnimation } = useFBX('/animations/salute.fbx')
   const { animations: victoryAnimation } = useFBX('/animations/victory.fbx')
   const { animations: clappingAnimation } = useFBX('/animations/clapping.fbx')
+  const { animations: noAnimation } = useFBX('/animations/SittingDisapproval.fbx')
+
 
   idleAnimation[0].name = 'idle'
   saluteAnimation[0].name = 'salute'
   clappingAnimation[0].name = 'clapping'
   victoryAnimation[0].name = 'victory'
+  noAnimation[0].name = 'no'
 
   const animations = [
     idleAnimation[0],
     saluteAnimation[0],
     clappingAnimation[0],
     victoryAnimation[0],
+    noAnimation[0],
   ]
 
   const { actions } = useAnimations(animations, group)
