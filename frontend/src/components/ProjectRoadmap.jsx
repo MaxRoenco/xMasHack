@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Star, Lock, Code, Brain, Keyboard, Mouse, Monitor, Command, FileCode, Globe, Database, Terminal, Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const ProjectRoadmap = ({ challenges }) => {
   const [currentLevel, setCurrentLevel] = useState(1);
+  const navigate = useNavigate();
 
   const decorativeElements = [
     { icon: Keyboard, position: 'top-20 left-20', rotation: '15deg', size: 48 },
@@ -48,7 +50,7 @@ const ProjectRoadmap = ({ challenges }) => {
                 className={`transform transition-all duration-300 ${
                   currentLevel === i+1 ? 'scale-110' : ''
                 }`}
-                onClick={() => setCurrentLevel(i+1)}
+                onClick={() => {setCurrentLevel(i+1); navigate('/challenges/'+(i+1))}}
               >
                 {/* Level Node */}
                 <div
