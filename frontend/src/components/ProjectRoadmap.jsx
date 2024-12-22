@@ -70,106 +70,120 @@ const ProjectRoadmap = () => {
   ];
 
   const decorativeElements = [
-        { icon: Brain, position: 'top-20 left-20', rotation: '15deg', size: 48 },
-        { icon: MessageCircle, position: 'top-40 right-20', rotation: '-10deg', size: 40 },
-        { icon: Sparkles, position: 'bottom-20 left-1/4', rotation: '5deg', size: 56 },
-    ];
+    { icon: Keyboard, position: 'top-20 left-20', rotation: '15deg', size: 48 },
+    { icon: Mouse, position: 'top-40 right-20', rotation: '-10deg', size: 40 },
+    { icon: Monitor, position: 'bottom-20 left-1/4', rotation: '5deg', size: 56 },
+    { icon: FileCode, position: 'top-1/3 right-1/3', rotation: '-20deg', size: 44 },
+    { icon: Terminal, position: 'bottom-40 right-1/4', rotation: '25deg', size: 48 }
+  ];
 
-    return (
-        <div className="min-h-screen bg-gray-900 p-8 overflow-hidden">
-            {/* Decorative Background Elements */}
-            {decorativeElements.map((element, index) => (
-                <div
-                    key={index}
-                    className={`absolute ${element.position} transform opacity-10 hover:opacity-20 transition-opacity duration-300`}
-                    style={{ transform: `rotate(${element.rotation})` }}
-                >
-                    <element.icon size={element.size} className="text-violet-400" />
-                </div>
-            ))}
-
-            <div className="max-w-4xl mx-auto">
-                {/* Header */}
-                <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold text-violet-300 mb-4">AI Chat Assistant</h1>
-                    <div className="flex items-center justify-center space-x-4">
-                        <div className="bg-violet-900/30 rounded-lg px-4 py-2 flex items-center">
-                            <Brain className="w-5 h-5 text-violet-400 mr-2" />
-                            <span className="text-violet-300">Your AI Companion</span>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Chat Container */}
-                <div className="bg-violet-900/30 rounded-xl shadow-lg backdrop-blur-sm border border-violet-500/20">
-                    {/* Chat Header */}
-                    <div className="p-4 border-b border-violet-500/20 flex justify-between items-center">
-                        <div className="flex items-center gap-2">
-                            <MessageCircle className="w-5 h-5 text-violet-400" />
-                            <span className="text-violet-300 font-semibold">Chat Session</span>
-                        </div>
-                        <button
-                            onClick={clearChat}
-                            className="px-4 py-2 text-sm text-violet-300 border border-violet-500/50 rounded-lg 
-                            hover:bg-violet-500/20 transition-colors"
-                        >
-                            Clear Chat
-                        </button>
-                    </div>
-
-                    {/* Messages Area */}
-                    <div className="h-[50vh] p-6 overflow-y-auto">
-                        {messages.map((message, index) => (
-                            <div
-                                key={index}
-                                className={`max-w-[70%] p-4 rounded-2xl mb-4 backdrop-blur-sm
-                                ${message.isUser
-                                    ? 'ml-auto bg-violet-600/40 text-violet-100 rounded-br-sm border border-violet-500/30'
-                                    : 'mr-auto bg-gray-800/40 text-gray-100 rounded-bl-sm border border-gray-700/30'
-                                }`}
-                            >
-                                {message.content}
-                            </div>
-                        ))}
-                        {isLoading && (
-                            <div className="max-w-[70%] p-4 rounded-2xl mb-4 bg-gray-800/40 text-gray-100 rounded-bl-sm border border-gray-700/30">
-                                <Loader2 className="w-5 h-5 animate-spin text-violet-400" />
-                            </div>
-                        )}
-                        <div ref={messagesEndRef} />
-                    </div>
-
-                    {/* Input Area */}
-                    <div className="p-4 border-t border-violet-500/20">
-                        <div className="flex gap-3">
-                            <input
-                                ref={inputRef}
-                                type="text"
-                                value={inputMessage}
-                                onChange={(e) => setInputMessage(e.target.value)}
-                                onKeyPress={handleKeyPress}
-                                placeholder="Type your message here..."
-                                className="flex-1 p-3 bg-gray-800/40 text-violet-100 border border-violet-500/30 rounded-lg 
-                                focus:border-violet-400 focus:outline-none transition-colors placeholder-violet-400/50"
-                                disabled={isLoading}
-                            />
-                            <button
-                                onClick={sendMessage}
-                                disabled={isLoading || !inputMessage.trim()}
-                                className="px-6 py-3 bg-violet-600/40 text-violet-100 font-semibold rounded-lg
-                                border border-violet-500/30 hover:bg-violet-500/40 transition-colors 
-                                disabled:bg-gray-800/40 disabled:border-gray-700/30 disabled:text-gray-500 
-                                disabled:cursor-not-allowed flex items-center gap-2"
-                            >
-                                <Send className="w-4 h-4" />
-                                Send
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  return (
+    <div className="min-h-screen bg-gray-900 p-8 overflow-hidden">
+      {/* Decorative Background Elements */}
+      {decorativeElements.map((element, index) => (
+        <div
+          key={index}
+          className={`absolute ${element.position} transform opacity-10 hover:opacity-20 transition-opacity duration-300`}
+          style={{ transform: `rotate(${element.rotation})` }}
+        >
+          <element.icon size={element.size} className="text-violet-400" />
         </div>
-    );
+      ))}
+      
+      <div className="max-w-6xl mx-auto">
+        {/* Header */}
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-violet-300 mb-4">Coding Adventure Map</h1>
+          <div className="flex items-center justify-center space-x-4">
+            <div className="bg-violet-900/30 rounded-lg px-4 py-2 flex items-center">
+              <Brain className="w-5 h-5 text-violet-400 mr-2" />
+              <span className="text-violet-300">KiKi - Your Coding Mentor</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Map Container */}
+        <div className="relative">
+          <SmoothPath />
+
+          {/* Level Markers */}
+          <div className="relative z-10 grid grid-cols-5 gap-24 px-12 py-24">
+            {levels.map((level) => (
+              <div
+                key={level.id}
+                className={`transform transition-all duration-300 ${
+                  currentLevel === level.id ? 'scale-110' : ''
+                }`}
+                onClick={() => setCurrentLevel(level.id)}
+              >
+                {/* Level Node */}
+                <div
+                  className={`w-24 h-24 rounded-2xl relative cursor-pointer transition-all duration-300 
+                    ${level.status === 'locked'
+                      ? 'bg-gray-800/50 border-gray-700'
+                      : level.status === 'completed'
+                      ? 'bg-violet-900/50 border-violet-500 shadow-lg shadow-violet-500/20'
+                      : 'bg-violet-700/50 border-violet-400 animate-pulse'
+                    } border-2 backdrop-blur-sm`}
+                >
+                  {/* Level Icon */}
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <level.icon className={`w-10 h-10 ${
+                      level.status === 'locked' 
+                        ? 'text-gray-500' 
+                        : level.status === 'completed'
+                        ? 'text-violet-400'
+                        : 'text-violet-300'
+                    }`} />
+                  </div>
+
+                  {/* Stars */}
+                  <div className="absolute -top-3 left-1/2 transform -translate-x-1/2 flex space-x-1">
+                    {[...Array(3)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-5 h-5 ${
+                          i < level.stars ? 'text-yellow-400 animate-bounce' : 'text-gray-600'
+                        }`}
+                        fill={i < level.stars ? 'currentColor' : 'none'}
+                      />
+                    ))}
+                  </div>
+
+                  {/* Level Title */}
+                  <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 text-center">
+                    <div className="text-lg font-bold text-violet-300 mb-1">
+                      {level.id}
+                    </div>
+                    <div className="text-sm text-violet-400 whitespace-nowrap">
+                      {level.title}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+
+        </div>
+      </div>
+
+      <style jsx>{`
+        .path-glow {
+          filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.5));
+        }
+        .path-animation {
+          stroke-dasharray: 20;
+          animation: dash 20s linear infinite;
+        }
+        @keyframes dash {
+          to {
+            stroke-dashoffset: 1000;
+          }
+        }
+      `}</style>
+    </div>
+  );
 };
 
 export default ProjectRoadmap;
