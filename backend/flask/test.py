@@ -104,7 +104,7 @@ def set_instructions(conversation_id):
 
 @app.route('/history/<conversation_id>', methods=['GET'])
 def get_history(conversation_id):
-    conversation = get_or_create_conversation(conversation_id)
+    conversation = get_or_create_conversation(conversation_id)[1:]
     return jsonify(conversation), 200
 
 @app.route('/clear/<conversation_id>', methods=['POST'])

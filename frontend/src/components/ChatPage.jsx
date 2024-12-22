@@ -4,7 +4,7 @@ import Chat from "./Chat"
 const ChatPage = () => {
   return (
     <>
-        <KikiSection className="left-[-7%]"/>
+        <KikiSection className="left-[-7%] top-[18%]"/>
         <Chat/>
     </>
   )
