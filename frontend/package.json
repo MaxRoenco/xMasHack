@@ -18,7 +18,7 @@
     "@react-three/fiber": "^8.17.10",
     "@types/three": "^0.171.0",
     "axios": "^1.6.7",
-    "framer-motion": "^11.0.3",
+    "framer-motion": "^11.15.0",
     "frontend": "file:",
     "lucide-react": "^0.469.0",
     "react": "^18.3.1",

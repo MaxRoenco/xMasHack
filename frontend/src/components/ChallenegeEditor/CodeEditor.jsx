@@ -1,6 +1,8 @@
 import { useRef, useState, useEffect } from "react";
 import { Editor } from "@monaco-editor/react";
 import { Loader2, Play, AlertCircle, CheckCircle2 } from 'lucide-react';
+import KikiSection from "../KikiSection";
+import Message from "../Message";
 
 const CodingChallengeEditor = ({ currentChallenge }) => {
   const editorRef = useRef();
@@ -105,7 +107,8 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
             />
           </div>
         </div>
-
+        <KikiSection isSuccess={isSuccess} className="right-[-12%] top-[25%]"/>
+        <Message tips={['Please specify the topic or purpose of the text, so I can tailor it to your needs within 100 characters!', '2', '3']}/>
         {/* Output Panel */}
         <div className="h-screen w-1/2 bg-gray-900 border-l border-violet-500/20">
           <div className="h-full flex flex-col p-4">
