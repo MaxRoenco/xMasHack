@@ -8,6 +8,7 @@ import ChatPage from "./components/ChatPage"
 import SideBar from './components/SideBar';
 import ProjectRoadmap from "./components/ProjectRoadmap"
 import { Star, Lock, Code, Brain, Keyboard, Mouse, Monitor, Command, FileCode, Globe, Database, Terminal, Sparkles } from 'lucide-react';
+import KikiTok from "./components/KikiToki";
 
 const challenges = [{
   id: 1,
@@ -52,6 +53,7 @@ function App() {
           <Route path="/kiki-section" element={<KikiSection />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/roadmap" element={<ProjectRoadmap challenges={challenges}/>} />
+          <Route path="/kikitok" element={<KikiTok />} />
           <Route path="/editor" element={
             <Box minH="100vh" bg="#0f0a19" color="gray.500" px={6} py={8}>
               <CodeEditor />
