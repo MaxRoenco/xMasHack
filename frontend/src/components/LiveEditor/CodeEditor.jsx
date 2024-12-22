@@ -23,7 +23,7 @@ const CodeEditor = () => {
   }, [language]);
 
   return (
-    <div className="fixed inset-0 flex flex-col overflow-hidden bg-gray-900 text-white w-full w-[96%] ml-[4%]">
+    <div className="fixed inset-0 flex flex-col overflow-hidden bg-gray-900 text-white w-[96%] ml-[4%]">
       <div className="flex-1 flex">
         {/* Left Panel */}
         <div className="w-1/2 flex flex-col">
