@@ -54,6 +54,7 @@ function App() {
           <Route path="/kiki-section" element={<KikiSection />} />
           <Route path="/chat" element={<ChatPage />} />
           <Route path="/roadmap" element={<ProjectRoadmap challenges={challenges}/>} />
+          <Route path="/kikitok" element={<KikiTok />} />
           <Route path="/editor" element={
             <Box minH="100vh" bg="#0f0a19" color="gray.500" px={6} py={8}>
               <CodeEditor />

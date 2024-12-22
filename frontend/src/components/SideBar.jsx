@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, Home, Settings, MessageSquare, Code, Map } from 'lucide-react';
+import { Menu, Home, Settings, MessageSquare, Code, Map, Cat } from 'lucide-react';
 
 const SideBar = () => {
   const location = useLocation();
@@ -29,6 +29,11 @@ const SideBar = () => {
       icon: Map, 
       path: '/roadmap', 
       label: 'Road map',
+    },
+    { 
+      icon: Cat, 
+      path: '/kikitok', 
+      label: 'KikiTok',
     },
   ];
 
