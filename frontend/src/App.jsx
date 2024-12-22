@@ -49,6 +49,7 @@ console.log(sumArray([0]));`,
   stars: 3,
   icon: Terminal,
 },
+
 {
   title: "Reverse String",
   optimal: "const reverseString = str => str.split('').reverse().join('');",
@@ -144,7 +145,6 @@ console.log(findMax([5, 10, 15]));`,
 },
 ];
 
-// Component to render challenge page with consistent styling
 const ChallengePageWrapper = ({ challenge }) => (
   <Box minH="100vh" bg="#0f0a19" color="gray.500" px={6} py={8}>
     <ChallengeEditor currentChallenge={challenge} />
