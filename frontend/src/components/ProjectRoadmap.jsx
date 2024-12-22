@@ -1,21 +1,8 @@
 import React, { useState } from 'react';
 import { Star, Lock, Code, Brain, Keyboard, Mouse, Monitor, Command, FileCode, Globe, Database, Terminal, Sparkles } from 'lucide-react';
 
-const ProjectRoadmap = () => {
+const ProjectRoadmap = ({ challenges }) => {
   const [currentLevel, setCurrentLevel] = useState(1);
-  
-  const levels = [
-    { id: 1, title: 'Setup Basics', status: 'completed', stars: 3, icon: Terminal },
-    { id: 2, title: 'First Component', status: 'completed', stars: 2, icon: Code },
-    { id: 3, title: 'State Management', status: 'active', stars: 0, icon: Brain },
-    { id: 4, title: 'API Integration', status: 'locked', stars: 0, icon: Globe },
-    { id: 5, title: 'Authentication', status: 'locked', stars: 0, icon: Lock },
-    { id: 6, title: 'Database Design', status: 'locked', stars: 0, icon: Database },
-    { id: 7, title: 'Advanced Features', status: 'locked', stars: 0, icon: Command },
-    { id: 8, title: 'Testing', status: 'locked', stars: 0, icon: FileCode },
-    { id: 9, title: 'Deployment', status: 'locked', stars: 0, icon: Globe },
-    { id: 10, title: 'Final Challenge', status: 'locked', stars: 0, icon: Sparkles },
-  ];
 
   const decorativeElements = [
     { icon: Keyboard, position: 'top-20 left-20', rotation: '15deg', size: 48 },
@@ -55,13 +42,13 @@ const ProjectRoadmap = () => {
 
           {/* Level Markers */}
           <div className="relative z-10 grid grid-cols-5 gap-24 px-12 py-24">
-            {levels.map((level) => (
+            {challenges.map((level, i) => (
               <div
-                key={level.id}
+                key={i}
                 className={`transform transition-all duration-300 ${
-                  currentLevel === level.id ? 'scale-110' : ''
+                  currentLevel === i+1 ? 'scale-110' : ''
                 }`}
-                onClick={() => setCurrentLevel(level.id)}
+                onClick={() => setCurrentLevel(i+1)}
               >
                 {/* Level Node */}
                 <div
@@ -100,7 +87,7 @@ const ProjectRoadmap = () => {
                   {/* Level Title */}
                   <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 text-center">
                     <div className="text-lg font-bold text-violet-300 mb-1">
-                      {level.id}
+                      {i+1}
                     </div>
                     <div className="text-sm text-violet-400 whitespace-nowrap">
                       {level.title}
