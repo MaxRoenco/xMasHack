@@ -12,6 +12,7 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
   const [isError, setIsError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [tips, setTips] = useState([]);
+  const [isMessageVisible, setIsMessageVisible] = useState(true);
 
   const onMount = (editor) => {
     editorRef.current = editor;
@@ -25,10 +26,10 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
   const verifyOutput = (output) => {
     const expectedLines = currentChallenge.result.split('\n');
     const actualLines = output.trim().split('\n');
-    
+
     if (expectedLines.length !== actualLines.length) return false;
-    
-    return expectedLines.every((expected, index) => 
+
+    return expectedLines.every((expected, index) =>
       expected.trim() === actualLines[index].trim()
     );
   };
@@ -42,28 +43,32 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
         },
         body: JSON.stringify({
           optimal: currentChallenge.optimal,
-          given: sourceCode
-        })
+          given: sourceCode,
+        }),
       });
 
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
       const data = await response.json();
-      setTips(prevTips => [...prevTips, data.message]);
+      setTips(prev => [...prev, data.message]); // Append new tips
+      setIsMessageVisible(true); // Reset visibility when new tips are added
     } catch (error) {
       console.error('Error sending failure data:', error);
+      setTips(prev => [...prev, 'Failed to fetch tips. Please try again.']); // Fallback tip
+      setIsMessageVisible(true); // Reset visibility
     }
   };
 
+
   const runCode = async () => {
     if (!editorRef.current) return;
-    
+
     try {
       setIsLoading(true);
       setIsError(false);
       setIsSuccess(false);
-      
+
       const sourceCode = editorRef.current.getValue();
       const result = await new Promise((resolve) => {
         try {
@@ -72,9 +77,9 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
           console.log = (...args) => {
             output += args.join(' ') + '\n';
           };
-          
+
           eval(sourceCode);
-          
+
           console.log = originalLog;
           resolve({ output });
         } catch (error) {
@@ -85,28 +90,28 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
       if (result.error) {
         setIsError(true);
         setOutput([result.error]);
-        await sendFailureData(sourceCode);
+        await sendFailureData(sourceCode); // Fetch tips on every failure
         return;
       }
 
       const success = verifyOutput(result.output);
       setIsSuccess(success);
       setOutput(result.output.split('\n'));
-      
+
       if (!success) {
-        await sendFailureData(sourceCode);
+        await sendFailureData(sourceCode); // Fetch tips on incorrect output
       }
-      
     } catch (error) {
       console.error(error);
       setIsError(true);
       setOutput(['An error occurred while running the code.']);
       const sourceCode = editorRef.current.getValue();
-      await sendFailureData(sourceCode);
+      await sendFailureData(sourceCode); // Ensure tips are fetched on any failure
     } finally {
       setIsLoading(false);
     }
   };
+
 
   return (
     <div className="fixed inset-0 flex flex-col overflow-hidden bg-gray-900 text-white w-[96%] ml-[4%]">
@@ -116,7 +121,7 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
             <h2 className="text-lg font-semibold text-violet-300 mb-2">Challenge Instructions:</h2>
             <p className="text-violet-100">{currentChallenge.instructions}</p>
           </div>
-          
+
           <div className="flex-1 relative">
             <Editor
               options={{
@@ -134,8 +139,13 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
             />
           </div>
         </div>
-        <KikiSection isSuccess={isSuccess} className="right-[-12%] top-[25%]"/>
-        <Message tips={tips}/>
+        <KikiSection isSuccess={isSuccess} className="right-[-12%] top-[25%]" />
+        <Message
+          tips={tips}
+          isVisible={isMessageVisible}
+          onClose={() => setIsMessageVisible(false)}
+        />
+
         <div className="h-screen w-1/2 bg-gray-900 border-l border-violet-500/20">
           <div className="h-full flex flex-col p-4">
             <div className="flex items-center justify-between mb-4">
@@ -173,11 +183,10 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
                 </div>
               )}
               {output ? (
-                <pre className={`font-mono ${
-                  isError ? 'text-red-400' : 
-                  isSuccess ? 'text-green-400' : 
-                  'text-violet-100'
-                }`}>
+                <pre className={`font-mono ${isError ? 'text-red-400' :
+                    isSuccess ? 'text-green-400' :
+                      'text-violet-100'
+                  }`}>
                   {output.join('\n')}
                 </pre>
               ) : (

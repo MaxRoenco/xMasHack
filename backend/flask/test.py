@@ -77,7 +77,7 @@ def generate_chat_completion(conversation_id, user_message, custom_instructions=
     # Add user message to history
     conversation['messages'].append({
         'role': 'user',
-        'content': user_message
+        'content': "Answer shortly, one short sentence: "+ user_message
     })
     
     try:
@@ -128,6 +128,21 @@ def optimize():
     '''
     
     message = generate_chat_completion_simple(prompt, instructions)
+    
+    return jsonify({
+        'message': message,
+    }), 200
+
+@app.route('/help', methods=['POST'])
+def help():
+    data = request.get_json()
+    if not data or 'message' not in data:
+        return jsonify({'error': 'Missing message field'}), 400
+    
+    given = data.get('message')
+    instructions = "You are a helpful AI code assistant whose job is to give advice and help the user solve issues with their code. be as short and brief as possible."
+    
+    message = generate_chat_completion_simple(given, instructions)
     
     return jsonify({
         'message': message,

@@ -11,12 +11,12 @@ const Message = ({ tips = [] }) => {
       if (typeof tip === 'string') {
         return {
           title: `Tip ${index + 1}`,
-          description: tip
+          description: tip,
         };
       }
       return {
         title: tip.title || `Tip ${index + 1}`,
-        description: tip.description || tip
+        description: tip.description || tip,
       };
     });
   };
@@ -28,12 +28,20 @@ const Message = ({ tips = [] }) => {
   const hasPrevStep = currentStep > 0;
 
   const handleNext = () => {
-    if (hasNextStep) setCurrentStep(prev => prev + 1);
+    if (hasNextStep) setCurrentStep((prev) => prev + 1);
   };
 
   const handlePrev = () => {
-    if (hasPrevStep) setCurrentStep(prev => prev - 1);
+    if (hasPrevStep) setCurrentStep((prev) => prev - 1);
   };
+
+  useEffect(() => {
+    // Reset visibility and step index when new tips are added
+    if (tips.length > 0) {
+      setIsVisible(true);
+      setCurrentStep(0);
+    }
+  }, [tips]);
 
   useEffect(() => {
     const handleKeyPress = (e) => {
@@ -46,11 +54,10 @@ const Message = ({ tips = [] }) => {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [currentStep]);
 
-  // Adjust the return logic here
   return (
     <AnimatePresence>
       {isVisible && formattedTips.length > 0 && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
@@ -58,16 +65,18 @@ const Message = ({ tips = [] }) => {
         >
           {/* Progress Bar */}
           <div className="absolute top-0 left-0 w-full h-1 bg-violet-900/30 rounded-t-lg overflow-hidden">
-            <motion.div 
+            <motion.div
               className="h-full bg-violet-500"
               initial={{ width: '0%' }}
-              animate={{ width: `${((currentStep + 1) / formattedTips.length) * 100}%` }}
+              animate={{
+                width: `${((currentStep + 1) / formattedTips.length) * 100}%`,
+              }}
               transition={{ duration: 0.3 }}
             />
           </div>
 
           {/* Close Button */}
-          <button 
+          <button
             onClick={() => setIsVisible(false)}
             className="absolute top-2 right-2 text-violet-300 hover:text-violet-100 transition-colors"
             title="Close"
@@ -108,7 +117,7 @@ const Message = ({ tips = [] }) => {
                   onClick={handlePrev}
                   disabled={!hasPrevStep}
                   className={`p-1 rounded transition-colors ${
-                    hasPrevStep 
+                    hasPrevStep
                       ? 'text-violet-300 hover:text-violet-100 hover:bg-violet-800/50'
                       : 'text-violet-700 cursor-not-allowed'
                   }`}
@@ -120,7 +129,7 @@ const Message = ({ tips = [] }) => {
                   onClick={handleNext}
                   disabled={!hasNextStep}
                   className={`p-1 rounded transition-colors ${
-                    hasNextStep 
+                    hasNextStep
                       ? 'text-violet-300 hover:text-violet-100 hover:bg-violet-800/50'
                       : 'text-violet-700 cursor-not-allowed'
                   }`}
@@ -136,6 +145,5 @@ const Message = ({ tips = [] }) => {
     </AnimatePresence>
   );
 };
-
 
 export default Message;
