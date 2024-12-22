@@ -34,10 +34,8 @@ const challenges = [{
   stars: 3,
   icon: Terminal,
 },
-// Add more challenges here...
 ];
 
-// Component to render challenge page with consistent styling
 const ChallengePageWrapper = ({ challenge }) => (
   <Box minH="100vh" bg="#0f0a19" color="gray.500" px={6} py={8}>
     <ChallengeEditor currentChallenge={challenge} />

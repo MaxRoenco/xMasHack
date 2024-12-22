@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "kikitoks",
+  "info": {
+    "singularName": "kikitok",
+    "pluralName": "kikitoks",
+    "displayName": "kikitok",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "code": {
+      "type": "string"
+    },
+    "difficulty": {
+      "type": "string"
+    },
+    "explanation": {
+      "type": "string"
+    },
+    "likes": {
+      "type": "integer"
+    },
+    "messages": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::message.message",
+      "mappedBy": "kikitok"
+    }
+  }
+}
