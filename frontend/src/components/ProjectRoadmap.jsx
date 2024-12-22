@@ -1,57 +1,5 @@
 import React, { useState } from 'react';
-import { Star, Lock, Check, Code, Brain, Keyboard, Mouse, Monitor, Command, FileCode, Globe, Database, Terminal, Sparkles } from 'lucide-react';
-
-const SmoothPath = () => {
-  return (
-    <div className="relative">
-      <svg className="absolute top-0 left-0 w-full h-full" viewBox="0 0 1000 600">
-        <defs>
-          <filter id="glow">
-            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
-            <feMerge>
-              <feMergeNode in="coloredBlur"/>
-              <feMergeNode in="SourceGraphic"/>
-            </feMerge>
-          </filter>
-          <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#4c1d95" stopOpacity="0.4"/>
-            <stop offset="50%" stopColor="#7c3aed" stopOpacity="1"/>
-            <stop offset="100%" stopColor="#4c1d95" stopOpacity="0.4"/>
-          </linearGradient>
-          {/* Animated dash pattern */}
-          <pattern id="pathPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
-            <circle cx="10" cy="10" r="2" fill="#7c3aed" className="animate-pulse"/>
-          </pattern>
-        </defs>
-        {/* Background glow path */}
-        <path
-          d="M 50,300 
-             C 200,300 300,200 400,200 
-             C 600,200 650,400 800,400 
-             C 950,400 1000,300 1100,300"
-          fill="none"
-          stroke="url(#pathGradient)"
-          strokeWidth="24"
-          strokeLinecap="round"
-          filter="url(#glow)"
-          className="path-glow"
-        />
-        {/* Animated overlay path */}
-        <path
-          d="M 50,300 
-             C 200,300 300,200 400,200 
-             C 600,200 650,400 800,400 
-             C 950,400 1000,300 1100,300"
-          fill="none"
-          stroke="url(#pathPattern)"
-          strokeWidth="4"
-          strokeLinecap="round"
-          className="path-animation"
-        />
-      </svg>
-    </div>
-  );
-};
+import { Star, Lock, Code, Brain, Keyboard, Mouse, Monitor, Command, FileCode, Globe, Database, Terminal, Sparkles } from 'lucide-react';
 
 const ProjectRoadmap = () => {
   const [currentLevel, setCurrentLevel] = useState(1);
@@ -104,7 +52,6 @@ const ProjectRoadmap = () => {
 
         {/* Map Container */}
         <div className="relative">
-          <SmoothPath />
 
           {/* Level Markers */}
           <div className="relative z-10 grid grid-cols-5 gap-24 px-12 py-24">
@@ -168,7 +115,7 @@ const ProjectRoadmap = () => {
         </div>
       </div>
 
-      <style jsx>{`
+      <style>{`
         .path-glow {
           filter: drop-shadow(0 0 8px rgba(124, 58, 237, 0.5));
         }
