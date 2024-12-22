@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, Home, Search, Compass, Bell, Settings } from 'lucide-react';
+import { Menu, Home, Settings, MessageSquare, Code, Map } from 'lucide-react';
 
 const SideBar = () => {
   const location = useLocation();
@@ -16,19 +16,19 @@ const SideBar = () => {
       label: 'Home',
     },
     { 
-      icon: Search, 
+      icon: MessageSquare, 
       path: '/chat', 
-      label: 'Search',
+      label: 'Chat',
     },
     { 
-      icon: Compass, 
+      icon: Code, 
       path: '/editor', 
-      label: 'Explore',
+      label: 'Code Editor',
     },
     { 
-      icon: Bell, 
-      path: '/notifications', 
-      label: 'Notifications',
+      icon: Map, 
+      path: '/roadmap', 
+      label: 'Road map',
     },
   ];
 

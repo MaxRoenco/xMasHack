@@ -5,6 +5,7 @@ import { Box } from "@chakra-ui/react";
 import CodeEditor from "./components/LiveEditor/CodeEditor";
 import ChatPage from "./components/ChatPage"
 import SideBar from './components/SideBar';
+import ProjectRoadmap from "./components/ProjectRoadmap"
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/kiki-section" element={<KikiSection />} />
           <Route path="/chat" element={<ChatPage />} />
+          <Route path="/roadmap" element={<ProjectRoadmap />} />
           <Route path="/editor" element={
             <Box minH="100vh" bg="#0f0a19" color="gray.500" px={6} py={8}>
               <CodeEditor />

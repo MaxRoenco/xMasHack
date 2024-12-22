@@ -26,7 +26,7 @@ const CodeEditor = () => {
   }, [language]);
 
   return (
-    <Box w="full">
+    <Box w="95%" right={0} position={"absolute"}>
       <HStack spacing={4}>
         <Box w="50%">
           <LanguageSelector language={language} onSelect={onSelect} />

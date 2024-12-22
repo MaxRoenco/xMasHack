@@ -1,105 +1,78 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Brain, Keyboard, Mouse, Monitor, FileCode, Terminal, Loader2, MessageCircle, Send } from 'lucide-react';
+import React, { useState } from 'react';
+import { Star, Lock, Check, Code, Brain, Keyboard, Mouse, Monitor, Command, FileCode, Globe, Database, Terminal, Sparkles } from 'lucide-react';
 
-const ChatInterface = () => {
-    const [messages, setMessages] = useState([]);
-    const [inputMessage, setInputMessage] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const [conversationId, setConversationId] = useState('');
-    const messagesEndRef = useRef(null);
-    const inputRef = useRef(null);
+const SmoothPath = () => {
+  return (
+    <div className="relative">
+      <svg className="absolute top-0 left-0 w-full h-full" viewBox="0 0 1000 600">
+        <defs>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+            <feMerge>
+              <feMergeNode in="coloredBlur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+          <linearGradient id="pathGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#4c1d95" stopOpacity="0.4"/>
+            <stop offset="50%" stopColor="#7c3aed" stopOpacity="1"/>
+            <stop offset="100%" stopColor="#4c1d95" stopOpacity="0.4"/>
+          </linearGradient>
+          {/* Animated dash pattern */}
+          <pattern id="pathPattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+            <circle cx="10" cy="10" r="2" fill="#7c3aed" className="animate-pulse"/>
+          </pattern>
+        </defs>
+        {/* Background glow path */}
+        <path
+          d="M 50,300 
+             C 200,300 300,200 400,200 
+             C 600,200 650,400 800,400 
+             C 950,400 1000,300 1100,300"
+          fill="none"
+          stroke="url(#pathGradient)"
+          strokeWidth="24"
+          strokeLinecap="round"
+          filter="url(#glow)"
+          className="path-glow"
+        />
+        {/* Animated overlay path */}
+        <path
+          d="M 50,300 
+             C 200,300 300,200 400,200 
+             C 600,200 650,400 800,400 
+             C 950,400 1000,300 1100,300"
+          fill="none"
+          stroke="url(#pathPattern)"
+          strokeWidth="4"
+          strokeLinecap="round"
+          className="path-animation"
+        />
+      </svg>
+    </div>
+  );
+};
 
-    useEffect(() => {
-        // Get or generate conversation ID
-        const storedId = localStorage.getItem('conversationId') ||
-            `conversation-${Date.now()}`;
-        setConversationId(storedId);
-        localStorage.setItem('conversationId', storedId);
-        loadHistory(storedId);
-    }, []);
+const ProjectRoadmap = () => {
+  const [currentLevel, setCurrentLevel] = useState(1);
+  
+  const levels = [
+    { id: 1, title: 'Setup Basics', status: 'completed', stars: 3, icon: Terminal },
+    { id: 2, title: 'First Component', status: 'completed', stars: 2, icon: Code },
+    { id: 3, title: 'State Management', status: 'active', stars: 0, icon: Brain },
+    { id: 4, title: 'API Integration', status: 'locked', stars: 0, icon: Globe },
+    { id: 5, title: 'Authentication', status: 'locked', stars: 0, icon: Lock },
+    { id: 6, title: 'Database Design', status: 'locked', stars: 0, icon: Database },
+    { id: 7, title: 'Advanced Features', status: 'locked', stars: 0, icon: Command },
+    { id: 8, title: 'Testing', status: 'locked', stars: 0, icon: FileCode },
+    { id: 9, title: 'Deployment', status: 'locked', stars: 0, icon: Globe },
+    { id: 10, title: 'Final Challenge', status: 'locked', stars: 0, icon: Sparkles },
+  ];
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
-
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages]);
-
-    const loadHistory = async (id) => {
-        try {
-            const response = await fetch(`http://127.0.0.1:5000/history/${id}`);
-            const data = await response.json();
-            setMessages(data.messages.map(msg => ({
-                content: msg.content,
-                isUser: msg.role === 'user'
-            })));
-        } catch (error) {
-            console.error('Error loading history:', error);
-        }
-    };
-
-    const sendMessage = async () => {
-        if (!inputMessage.trim()) return;
-
-        setIsLoading(true);
-        setMessages(prev => [...prev, { content: inputMessage, isUser: true }]);
-        setInputMessage('');
-
-        try {
-            const response = await fetch('http://127.0.0.1:5000/generate', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    message: inputMessage,
-                    conversation_id: conversationId
-                })
-            });
-
-            const data = await response.json();
-            setMessages(prev => [...prev, { content: data.message, isUser: false }]);
-        } catch (error) {
-            setMessages(prev => [...prev, {
-                content: 'Sorry, there was an error processing your message. Please try again.',
-                isUser: false
-            }]);
-            console.error('Error:', error);
-        }
-
-        setIsLoading(false);
-        inputRef.current?.focus();
-    };
-
-    const clearChat = async () => {
-        try {
-            await fetch(`http://127.0.0.1:5000/clear/${conversationId}`, {
-                method: 'POST'
-            });
-
-            const newId = `conversation-${Date.now()}`;
-            setConversationId(newId);
-            localStorage.setItem('conversationId', newId);
-            setMessages([]);
-        } catch (error) {
-            console.error('Error clearing chat:', error);
-        }
-    };
-
-    const handleKeyPress = (e) => {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            sendMessage();
-        }
-    };
-
-    const decorativeElements = [
-        { icon: Keyboard, position: 'top-20 left-20', rotation: '15deg', size: 48 },
-        { icon: Mouse, position: 'top-40 right-20', rotation: '-10deg', size: 40 },
-        { icon: Monitor, position: 'bottom-20 left-1/4', rotation: '5deg', size: 56 },
-        { icon: FileCode, position: 'top-1/3 right-1/3', rotation: '-20deg', size: 44 },
-        { icon: Terminal, position: 'bottom-40 right-1/4', rotation: '25deg', size: 48 }
+  const decorativeElements = [
+        { icon: Brain, position: 'top-20 left-20', rotation: '15deg', size: 48 },
+        { icon: MessageCircle, position: 'top-40 right-20', rotation: '-10deg', size: 40 },
+        { icon: Sparkles, position: 'bottom-20 left-1/4', rotation: '5deg', size: 56 },
     ];
 
     return (
@@ -118,7 +91,7 @@ const ChatInterface = () => {
             <div className="max-w-4xl mx-auto">
                 {/* Header */}
                 <div className="text-center mb-8">
-                    <h1 className="text-4xl font-bold text-violet-300 mb-4">Coding Assistant</h1>
+                    <h1 className="text-4xl font-bold text-violet-300 mb-4">AI Chat Assistant</h1>
                     <div className="flex items-center justify-center space-x-4">
                         <div className="bg-violet-900/30 rounded-lg px-4 py-2 flex items-center">
                             <Brain className="w-5 h-5 text-violet-400 mr-2" />
@@ -126,6 +99,7 @@ const ChatInterface = () => {
                         </div>
                     </div>
                 </div>
+
                 {/* Chat Container */}
                 <div className="bg-violet-900/30 rounded-xl shadow-lg backdrop-blur-sm border border-violet-500/20">
                     {/* Chat Header */}
@@ -144,7 +118,7 @@ const ChatInterface = () => {
                     </div>
 
                     {/* Messages Area */}
-                    <div className="h-[60vh] p-6 overflow-y-auto">
+                    <div className="h-[50vh] p-6 overflow-y-auto">
                         {messages.map((message, index) => (
                             <div
                                 key={index}
@@ -198,4 +172,4 @@ const ChatInterface = () => {
     );
 };
 
-export default ChatInterface;
+export default ProjectRoadmap;
