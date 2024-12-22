@@ -105,7 +105,7 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
             />
           </div>
         </div>
-
+        <KikiSection className="left-[-7%] top-[12%]"/>
         {/* Output Panel */}
         <div className="h-screen w-1/2 bg-gray-900 border-l border-violet-500/20">
           <div className="h-full flex flex-col p-4">
