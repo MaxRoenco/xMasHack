@@ -11,6 +11,7 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [tips, setTips] = useState([]);
 
   const onMount = (editor) => {
     editorRef.current = editor;
@@ -32,6 +33,29 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
     );
   };
 
+  const sendFailureData = async (sourceCode) => {
+    try {
+      const response = await fetch('http://127.0.0.1:5000/optimize', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          optimal: currentChallenge.optimal,
+          given: sourceCode
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setTips(prevTips => [...prevTips, data.message]);
+    } catch (error) {
+      console.error('Error sending failure data:', error);
+    }
+  };
+
   const runCode = async () => {
     if (!editorRef.current) return;
     
@@ -40,7 +64,6 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
       setIsError(false);
       setIsSuccess(false);
       
-      // Simulated code execution - replace with your actual executeCode function
       const sourceCode = editorRef.current.getValue();
       const result = await new Promise((resolve) => {
         try {
@@ -62,6 +85,7 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
       if (result.error) {
         setIsError(true);
         setOutput([result.error]);
+        await sendFailureData(sourceCode);
         return;
       }
 
@@ -69,10 +93,16 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
       setIsSuccess(success);
       setOutput(result.output.split('\n'));
       
+      if (!success) {
+        await sendFailureData(sourceCode);
+      }
+      
     } catch (error) {
       console.error(error);
       setIsError(true);
       setOutput(['An error occurred while running the code.']);
+      const sourceCode = editorRef.current.getValue();
+      await sendFailureData(sourceCode);
     } finally {
       setIsLoading(false);
     }
@@ -81,15 +111,12 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
   return (
     <div className="fixed inset-0 flex flex-col overflow-hidden bg-gray-900 text-white w-[96%] ml-[4%]">
       <div className="flex-1 flex">
-        {/* Left Panel */}
         <div className="w-1/2 flex flex-col">
-          {/* Instructions */}
           <div className="p-4 border-b border-violet-500/20">
             <h2 className="text-lg font-semibold text-violet-300 mb-2">Challenge Instructions:</h2>
             <p className="text-violet-100">{currentChallenge.instructions}</p>
           </div>
           
-          {/* Editor */}
           <div className="flex-1 relative">
             <Editor
               options={{
@@ -108,8 +135,7 @@ const CodingChallengeEditor = ({ currentChallenge }) => {
           </div>
         </div>
         <KikiSection isSuccess={isSuccess} className="right-[-12%] top-[25%]"/>
-        <Message tips={['Please specify the topic or purpose of the text, so I can tailor it to your needs within 100 characters!', '2', '3']}/>
-        {/* Output Panel */}
+        <Message tips={tips}/>
         <div className="h-screen w-1/2 bg-gray-900 border-l border-violet-500/20">
           <div className="h-full flex flex-col p-4">
             <div className="flex items-center justify-between mb-4">

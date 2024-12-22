@@ -13,6 +13,44 @@ conversations = {}
 # Define the system instructions
 SYSTEM_INSTRUCTIONS = """You are a helpful AI assistant called kiki the cat that answers all questions as short and briefly as possible while remaining helpful. answer shortly, consice, brief, and small text."""
 
+def generate_chat_completion_simple(prompt, instructions=None):
+    # Prepare conversation messages
+    messages = []
+    
+    # Add system instructions if provided
+    if instructions:
+        messages.append({
+            'role': 'system',
+            'content': instructions
+        })
+    
+    # Add user prompt
+    messages.append({
+        'role': 'user',
+        'content': prompt
+    })
+    
+    try:
+        # Send request to Ollama API
+        response = requests.post(
+            OLLAMA_API_URL,
+            json={
+                'model': 'phi3:mini',
+                'messages': messages,
+                'stream': False
+            }
+        )
+
+        if response.status_code != 200:
+            return f"Error: Received status code {response.status_code}"
+
+        # Parse and return the response
+        response_data = response.json()
+        return response_data['message']['content']
+
+    except requests.exceptions.RequestException as error:
+        return f"Error generating completion: {error}"
+
 def get_or_create_conversation(conversation_id):
     if conversation_id not in conversations:
         conversations[conversation_id] = {
@@ -74,10 +112,10 @@ def generate_chat_completion(conversation_id, user_message, custom_instructions=
 @app.route('/optimize', methods=['POST'])
 def optimize():
     data = request.get_json()
+    print(data)
     if not data or 'optimal' not in data or 'given' not in data:
         return jsonify({'error': 'Missing message field'}), 400
     
-    conversation_id = data.get('conversation_id', 'default')
     optimal = data.get('optimal')
     given = data.get('given')
     instructions = "You are a helpful AI assistant whose job is to compare the optimal code, with the given one, and help the user figure out the problems in their code, and suggest improvements. Your answers should be brief and NOT contain the optimal code, only the explanation or how to improve it. Just enough to address the issue in the code. the answer should be short and brief. 10 words max."
@@ -89,12 +127,10 @@ def optimize():
     Assistant answer (only 1 very short sentence, of a simple advice, 10 words max):
     '''
     
-    message = generate_chat_completion(conversation_id, prompt, instructions)
+    message = generate_chat_completion_simple(prompt, instructions)
     
     return jsonify({
         'message': message,
-        'conversation_id': conversation_id,
-        'history': conversations[conversation_id]['messages']
     }), 200
 
 @app.route('/chat', methods=['POST'])

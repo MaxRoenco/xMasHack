@@ -7,11 +7,12 @@ import ChallengeEditor from "./components/ChallenegeEditor/CodeEditor";
 import ChatPage from "./components/ChatPage"
 import SideBar from './components/SideBar';
 import ProjectRoadmap from "./components/ProjectRoadmap"
-import { Star, Lock, Code, Brain, Keyboard, Mouse, Monitor, Command, FileCode, Globe, Database, Terminal, Sparkles } from 'lucide-react';
+import { Terminal } from 'lucide-react';
 
 const challenges = [{
   id: 1,
   title: "Even Number Checker",
+  optimal: "const isEven = num => !(num%2);",
   startingCode: "const isEven = num => // write your code here \n\n\n\n\n // test cases (do not modify) \n console.log(isEven(5));console.log(isEven(3));console.log(isEven(2));console.log(isEven(10));console.log(isEven(14));",
   instructions: "Complete this function that should return true if the number is even and false if the number is odd.",
   result: "false\nfalse\ntrue\ntrue\ntrue",
@@ -23,6 +24,7 @@ const challenges = [{
 {
   id: 2,
   title: "Sum Array",
+  optimal: "const sumArray = arr => arr.reduce((a,b) => a+b, 0);",
   startingCode: "const sumArray = arr => // write your code here \n\n\n\n\n // test cases (do not modify) \n console.log(sumArray([1,2,3]));console.log(sumArray([5,-2,4]));console.log(sumArray([0]));",
   instructions: "Create a function that takes an array of numbers and returns their sum.",
   result: "6\n7\n0",
