@@ -29,12 +29,15 @@ const ChatInterface = () => {
         try {
             const response = await fetch(`http://127.0.0.1:5000/history/${id}`);
             const data = await response.json();
-            setMessages(data.messages.map(msg => ({
+            // Check if data is an array (assuming backend returns array directly)
+            const messages = Array.isArray(data) ? data : [];
+            setMessages(messages.map(msg => ({
                 content: msg.content,
                 isUser: msg.role === 'user'
             })));
         } catch (error) {
             console.error('Error loading history:', error);
+            setMessages([]); // Set empty messages on error
         }
     };
 
@@ -46,7 +49,7 @@ const ChatInterface = () => {
         setInputMessage('');
 
         try {
-            const response = await fetch('http://127.0.0.1:5000/generate', {
+            const response = await fetch('http://127.0.0.1:5000/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
